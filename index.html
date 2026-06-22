@@ -10,6 +10,7 @@
   :root {
     --bg:         #1e1e1e;
     --surface:    #2a2a2a;
+    --surface2:   #2f2f2f;
     --accent:     #a8c53a;
     --accent-dim: #6b8e3e;
     --text:       #f0f0f0;
@@ -26,20 +27,79 @@
     display: flex; flex-direction: column;
   }
 
+  /* ── Header ── */
   header {
     background: var(--surface); border-bottom: 1px solid var(--border);
-    padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
+    padding: 0 16px; display: flex; align-items: center;
+    justify-content: space-between; flex-shrink: 0; height: 56px; position: relative; z-index: 200;
   }
 
-  .back-btn {
-    display: none; align-items: center; gap: 6px;
-    background: transparent; border: 1px solid var(--border); border-radius: 8px;
-    padding: 6px 12px; color: var(--muted); font-family: var(--font-body);
-    font-size: 13px; cursor: pointer; transition: border-color 0.15s, color 0.15s;
+  /* Left: back button (hidden on landing) */
+  .nav-back {
+    display: none; align-items: center; gap: 8px;
+    background: transparent; border: none; color: var(--text);
+    font-family: var(--font-body); font-size: 15px; font-weight: 600;
+    cursor: pointer; padding: 0 12px; border-right: 1px solid var(--border);
+    transition: color 0.15s;
   }
-  .back-btn:hover { border-color: var(--text); color: var(--text); }
-  .back-btn.show { display: flex; }
+  .nav-back:hover { color: var(--accent); }
+  .nav-back.show { display: flex; }
+  .nav-back svg { flex-shrink: 0; }
 
+  /* Center: current game title (hidden on landing) */
+  .nav-title {
+    display: none; align-items: center;
+    font-family: var(--font-display); font-size: 17px; font-weight: 700;
+    color: var(--text); flex: 1; justify-content: center;
+  }
+  .nav-title.show { display: flex; }
+
+  /* Right: games dropdown trigger */
+  .nav-games-btn {
+    display: flex; align-items: center; gap: 8px;
+    background: transparent; border: none; color: var(--muted);
+    font-family: var(--font-body); font-size: 14px; font-weight: 500;
+    cursor: pointer; padding: 0 12px; border-left: 1px solid var(--border);
+    transition: color 0.15s;
+  }
+  .nav-games-btn:hover { color: var(--text); }
+  .nav-games-btn svg { transition: transform 0.2s; }
+  .nav-games-btn.open svg { transform: rotate(180deg); }
+
+  /* Dropdown */
+  .nav-dropdown {
+    position: absolute; top: 100%; right: 0;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 0 0 var(--radius) var(--radius);
+    min-width: 220px; overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    opacity: 0; pointer-events: none; transform: translateY(-6px);
+    transition: opacity 0.15s, transform 0.15s;
+  }
+  .nav-dropdown.open { opacity: 1; pointer-events: all; transform: translateY(0); }
+
+  .nav-dropdown-item {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 18px; cursor: pointer; border-bottom: 1px solid var(--border);
+    transition: background 0.1s;
+  }
+  .nav-dropdown-item:last-child { border-bottom: none; }
+  .nav-dropdown-item:hover { background: var(--surface2); }
+  .nav-dropdown-item.active { background: var(--surface2); }
+  .nav-dropdown-item .item-name { font-size: 14px; font-weight: 600; color: var(--text); }
+  .nav-dropdown-item .item-desc { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .nav-dropdown-item .item-text { display: flex; flex-direction: column; }
+  .nav-dropdown-item .item-active { font-size: 11px; color: var(--accent); font-weight: 600; }
+
+  /* Landing section on left when no game active */
+  .nav-home-btn {
+    display: flex; align-items: center;
+    font-family: var(--font-display); font-size: 17px; font-weight: 700;
+    color: var(--accent); padding: 0 4px;
+    background: transparent; border: none; cursor: pointer;
+  }
+
+  /* ── Content ── */
   .content { flex: 1; position: relative; overflow: hidden; }
 
   #landing {
@@ -88,20 +148,53 @@
 <body>
 
 <header>
-  <a href="https://courtsideconversation.com">
-    <img src="https://courtsideconversation-ctrl.github.io/ATP-Quiz/logo.png" alt="CourtsideConversation" style="height:38px;">
-  </a>
-  <button class="back-btn" id="back-btn" onclick="goHome()">← Back to games</button>
+  <!-- Left: back or home -->
+  <button class="nav-back" id="nav-back" onclick="goHome()">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    All games
+  </button>
+  <button class="nav-home-btn" id="nav-home-btn" onclick="goHome()">Tennis Quizzes</button>
+
+  <!-- Center: current game title -->
+  <div class="nav-title" id="nav-title">—</div>
+
+  <!-- Right: games switcher dropdown -->
+  <div style="position:relative;">
+    <button class="nav-games-btn" id="nav-games-btn" onclick="toggleDropdown()">
+      Games
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5L7 9L11 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="nav-dropdown" id="nav-dropdown">
+      <div class="nav-dropdown-item" id="dd-home" onclick="goHome()">
+        <div class="item-text">
+          <span class="item-name">All games</span>
+          <span class="item-desc">Return to the hub</span>
+        </div>
+      </div>
+      <div class="nav-dropdown-item" id="dd-atp" onclick="launchGame('atp'); closeDropdown()">
+        <div class="item-text">
+          <span class="item-name">ATP Photo Quiz</span>
+          <span class="item-desc">Name players from headshots</span>
+        </div>
+        <span class="item-active" id="dd-atp-active" style="display:none">Playing</span>
+      </div>
+      <div class="nav-dropdown-item" id="dd-silhouette" onclick="launchGame('silhouette'); closeDropdown()">
+        <div class="item-text">
+          <span class="item-name">Silhouette Game</span>
+          <span class="item-desc">Name players from silhouettes</span>
+        </div>
+        <span class="item-active" id="dd-silhouette-active" style="display:none">Playing</span>
+      </div>
+    </div>
+  </div>
 </header>
 
 <div class="content">
-
   <div id="landing">
     <div class="hero">
       <h1 class="hero-title">Tennis<br><em>Quizzes</em></h1>
       <p class="hero-desc">Test your tennis knowledge. How well do you know the ATP Top 100?</p>
     </div>
-
     <div class="games-grid">
       <div class="game-card" onclick="launchGame('atp')">
         <div class="game-name">ATP Photo Quiz</div>
@@ -119,7 +212,6 @@
   <div id="game-frame">
     <iframe id="iframe" src="" allow="autoplay"></iframe>
   </div>
-
 </div>
 
 <script>
@@ -127,20 +219,72 @@
     atp:        'https://courtsideconversation-ctrl.github.io/ATP-Quiz/',
     silhouette: 'https://courtsideconversation-ctrl.github.io/Silhouette-Quiz/'
   };
+  const NAMES = {
+    atp:        'ATP Photo Quiz',
+    silhouette: 'Silhouette Game'
+  };
+
+  let currentGame = null;
+  let dropdownOpen = false;
 
   function launchGame(game) {
+    currentGame = game;
     document.getElementById('iframe').src = URLS[game];
     document.getElementById('landing').style.display = 'none';
     document.getElementById('game-frame').classList.add('show');
-    document.getElementById('back-btn').classList.add('show');
+
+    // Update header
+    document.getElementById('nav-back').classList.add('show');
+    document.getElementById('nav-home-btn').style.display = 'none';
+    document.getElementById('nav-title').textContent = NAMES[game];
+    document.getElementById('nav-title').classList.add('show');
+
+    // Update dropdown active states
+    document.getElementById('dd-atp-active').style.display       = game === 'atp'        ? '' : 'none';
+    document.getElementById('dd-silhouette-active').style.display = game === 'silhouette' ? '' : 'none';
+    document.getElementById('dd-atp').classList.toggle('active',        game === 'atp');
+    document.getElementById('dd-silhouette').classList.toggle('active', game === 'silhouette');
   }
 
   function goHome() {
+    currentGame = null;
     document.getElementById('iframe').src = '';
     document.getElementById('game-frame').classList.remove('show');
     document.getElementById('landing').style.display = 'flex';
-    document.getElementById('back-btn').classList.remove('show');
+
+    // Reset header
+    document.getElementById('nav-back').classList.remove('show');
+    document.getElementById('nav-home-btn').style.display = '';
+    document.getElementById('nav-title').classList.remove('show');
+
+    // Clear active states
+    document.getElementById('dd-atp-active').style.display        = 'none';
+    document.getElementById('dd-silhouette-active').style.display = 'none';
+    document.getElementById('dd-atp').classList.remove('active');
+    document.getElementById('dd-silhouette').classList.remove('active');
+
+    closeDropdown();
   }
+
+  function toggleDropdown() {
+    dropdownOpen = !dropdownOpen;
+    document.getElementById('nav-dropdown').classList.toggle('open', dropdownOpen);
+    document.getElementById('nav-games-btn').classList.toggle('open', dropdownOpen);
+  }
+
+  function closeDropdown() {
+    dropdownOpen = false;
+    document.getElementById('nav-dropdown').classList.remove('open');
+    document.getElementById('nav-games-btn').classList.remove('open');
+  }
+
+  // Close dropdown when clicking outside
+  document.addEventListener('click', e => {
+    if (!document.getElementById('nav-games-btn').contains(e.target) &&
+        !document.getElementById('nav-dropdown').contains(e.target)) {
+      closeDropdown();
+    }
+  });
 </script>
 </body>
 </html>
