@@ -235,6 +235,7 @@
 
   function launchGame(game) {
     currentGame = game;
+    window.scrollTo(0, 0);
     document.getElementById('iframe').src = URLS[game];
     document.getElementById('landing').style.display = 'none';
     document.getElementById('game-frame').classList.add('show');
