@@ -51,6 +51,8 @@
     display: none; align-items: center;
     font-family: var(--font-display); font-size: 17px; font-weight: 700;
     color: var(--text); flex: 1; justify-content: center;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    padding: 0 8px; text-align: center;
   }
   .nav-title.show { display: flex; }
 
@@ -142,6 +144,10 @@
     .hero-title { font-size: 32px; }
     .games-grid { flex-direction: column; align-items: center; }
     .game-card { max-width: 100%; }
+    .nav-back { font-size: 13px; padding: 0 8px; }
+    .nav-games-btn { font-size: 13px; padding: 0 8px; }
+    .nav-home-btn { font-size: 15px; }
+    .nav-title { font-size: 14px; }
   }
 </style>
 </head>
@@ -220,8 +226,8 @@
     silhouette: 'https://courtsideconversation-ctrl.github.io/Silhouette-Quiz/'
   };
   const NAMES = {
-    atp:        'ATP Photo Quiz',
-    silhouette: 'Silhouette Game'
+    atp:        'ATP Quiz',
+    silhouette: 'Silhouette'
   };
 
   let currentGame = null;
