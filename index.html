@@ -191,6 +191,13 @@
         </div>
         <span class="item-active" id="dd-silhouette-active" style="display:none">Playing</span>
       </div>
+      <div class="nav-dropdown-item" id="dd-wordle" onclick="launchGame('wordle'); closeDropdown()">
+        <div class="item-text">
+          <span class="item-name">Tennis Wordle</span>
+          <span class="item-desc">Guess the player from clues</span>
+        </div>
+        <span class="item-active" id="dd-wordle-active" style="display:none">Playing</span>
+      </div>
     </div>
   </div>
 </header>
@@ -212,6 +219,11 @@
         <div class="game-desc">Can you name ATP players from their silhouette alone?</div>
         <button class="game-btn">Play now</button>
       </div>
+      <div class="game-card" onclick="launchGame('wordle')">
+        <div class="game-name">Tennis Wordle</div>
+        <div class="game-desc">Guess the ATP player from stats and clues.</div>
+        <button class="game-btn">Play now</button>
+      </div>
     </div>
   </div>
 
@@ -223,11 +235,13 @@
 <script>
   const URLS = {
     atp:        'https://courtsideconversation-ctrl.github.io/ATP-Quiz/',
-    silhouette: 'https://courtsideconversation-ctrl.github.io/Silhouette-Quiz/'
+    silhouette: 'https://courtsideconversation-ctrl.github.io/Silhouette-Quiz/',
+    wordle:     'https://courtsideconversation-ctrl.github.io/tennis-wordle/'
   };
   const NAMES = {
     atp:        'ATP Quiz',
-    silhouette: 'Silhouette'
+    silhouette: 'Silhouette',
+    wordle:     'Tennis Wordle'
   };
 
   let currentGame = null;
@@ -247,10 +261,12 @@
     document.getElementById('nav-title').classList.add('show');
 
     // Update dropdown active states
-    document.getElementById('dd-atp-active').style.display       = game === 'atp'        ? '' : 'none';
-    document.getElementById('dd-silhouette-active').style.display = game === 'silhouette' ? '' : 'none';
+    document.getElementById('dd-atp-active').style.display        = game === 'atp'        ? '' : 'none';
+    document.getElementById('dd-silhouette-active').style.display  = game === 'silhouette' ? '' : 'none';
+    document.getElementById('dd-wordle-active').style.display      = game === 'wordle'     ? '' : 'none';
     document.getElementById('dd-atp').classList.toggle('active',        game === 'atp');
     document.getElementById('dd-silhouette').classList.toggle('active', game === 'silhouette');
+    document.getElementById('dd-wordle').classList.toggle('active',     game === 'wordle');
   }
 
   function goHome() {
@@ -267,8 +283,10 @@
     // Clear active states
     document.getElementById('dd-atp-active').style.display        = 'none';
     document.getElementById('dd-silhouette-active').style.display = 'none';
+    document.getElementById('dd-wordle-active').style.display     = 'none';
     document.getElementById('dd-atp').classList.remove('active');
     document.getElementById('dd-silhouette').classList.remove('active');
+    document.getElementById('dd-wordle').classList.remove('active');
 
     closeDropdown();
   }
@@ -292,6 +310,15 @@
       closeDropdown();
     }
   });
+
+  // Send height to Wix parent so iframe auto-expands
+  function sendHeight() {
+    const height = document.body.scrollHeight;
+    window.parent.postMessage({ height }, '*');
+  }
+  // Send on load and whenever content changes
+  window.addEventListener('load', sendHeight);
+  new ResizeObserver(sendHeight).observe(document.body);
 </script>
 </body>
 </html>
