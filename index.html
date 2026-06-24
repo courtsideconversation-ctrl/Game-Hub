@@ -97,8 +97,9 @@
   .nav-home-btn {
     display: flex; align-items: center;
     font-family: var(--font-display); font-size: 17px; font-weight: 700;
-    color: var(--accent); padding: 0 4px;
+    color: var(--text); padding: 0 4px;
     background: transparent; border: none; cursor: pointer;
+    text-transform: uppercase; letter-spacing: 0.5px;
   }
 
   /* ── Content ── */
@@ -112,14 +113,14 @@
   .hero { text-align: center; max-width: 480px; }
   .hero-title {
     font-family: var(--font-display); font-size: 42px; font-weight: 900;
-    line-height: 1.1; margin-bottom: 14px;
+    line-height: 1.1; margin-bottom: 14px; letter-spacing: -0.5px;
   }
   .hero-title em { font-style: normal; color: var(--accent); }
   .hero-desc { color: var(--muted); font-size: 15px; line-height: 1.7; }
 
-  .games-grid { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; width: 100%; max-width: 560px; }
+  .games-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; width: 100%; max-width: 860px; }
   .game-card {
-    flex: 1; min-width: 220px; max-width: 260px;
+    
     background: var(--surface); border: 1px solid var(--border);
     border-radius: var(--radius); padding: 24px 20px;
     display: flex; flex-direction: column; gap: 12px;
@@ -142,7 +143,7 @@
 
   @media (max-width: 480px) {
     .hero-title { font-size: 32px; }
-    .games-grid { flex-direction: column; align-items: center; }
+    .games-grid { grid-template-columns: 1fr; }
     .game-card { max-width: 100%; }
     .nav-back { font-size: 13px; padding: 0 8px; }
     .nav-games-btn { font-size: 13px; padding: 0 8px; }
@@ -159,7 +160,7 @@
     <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
     All games
   </button>
-  <button class="nav-home-btn" id="nav-home-btn" onclick="goHome()">ATP Games</button>
+  <button class="nav-home-btn" id="nav-home-btn" onclick="goHome()"><span style="color:var(--accent)">ATP Tour</span>&nbsp;Games</button>
 
   <!-- Center: current game title -->
   <div class="nav-title" id="nav-title">—</div>
@@ -205,8 +206,8 @@
 <div class="content">
   <div id="landing">
     <div class="hero">
-      <h1 class="hero-title">ATP<br><em>Games</em></h1>
-      <p class="hero-desc">Test your ATP knowledge across three unique games.</p>
+      <h1 class="hero-title" style="text-transform:uppercase;">ATP Tour<br><em>Games</em></h1>
+      <p class="hero-desc">Test your knowledge of the ATP Tour with these fun games!</p>
     </div>
     <div class="games-grid">
       <div class="game-card" onclick="launchGame('atp')">
