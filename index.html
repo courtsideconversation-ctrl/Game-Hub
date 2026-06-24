@@ -178,19 +178,19 @@
           <span class="item-desc">Return to the hub</span>
         </div>
       </div>
-      <div class="nav-dropdown-item" id="dd-atp" onclick="launchGame('atp'); closeDropdown()">
-        <div class="item-text">
-          <span class="item-name">ATP Photo Quiz</span>
-          <span class="item-desc">Name players from headshots</span>
-        </div>
-        <span class="item-active" id="dd-atp-active" style="display:none">Playing</span>
-      </div>
       <div class="nav-dropdown-item" id="dd-silhouette" onclick="launchGame('silhouette'); closeDropdown()">
         <div class="item-text">
           <span class="item-name">Silhouette Game</span>
           <span class="item-desc">Name players from silhouettes</span>
         </div>
         <span class="item-active" id="dd-silhouette-active" style="display:none">Playing</span>
+      </div>
+      <div class="nav-dropdown-item" id="dd-atp" onclick="launchGame('atp'); closeDropdown()">
+        <div class="item-text">
+          <span class="item-name">ATP Photo Quiz</span>
+          <span class="item-desc">Name players from headshots</span>
+        </div>
+        <span class="item-active" id="dd-atp-active" style="display:none">Playing</span>
       </div>
       <div class="nav-dropdown-item" id="dd-wordle" onclick="launchGame('wordle'); closeDropdown()">
         <div class="item-text">
@@ -210,14 +210,14 @@
       <p class="hero-desc">Test your knowledge of the ATP Tour with these fun games!</p>
     </div>
     <div class="games-grid">
-      <div class="game-card" onclick="launchGame('atp')">
-        <div class="game-name">ATP Photo Quiz</div>
-        <div class="game-desc">Name as many ATP Top 100 players as you can from their headshots. Updated every Monday.</div>
-        <button class="game-btn">Play now</button>
-      </div>
       <div class="game-card" onclick="launchGame('silhouette')">
         <div class="game-name">Silhouette Game</div>
         <div class="game-desc">Can you name ATP players from their silhouette alone?</div>
+        <button class="game-btn">Play now</button>
+      </div>
+      <div class="game-card" onclick="launchGame('atp')">
+        <div class="game-name">ATP Photo Quiz</div>
+        <div class="game-desc">Name as many ATP Top 100 players as you can from their headshots. Updated every Monday.</div>
         <button class="game-btn">Play now</button>
       </div>
       <div class="game-card" onclick="launchGame('wordle')">
