@@ -253,6 +253,7 @@
 
     // Track game launch in GA
     gtag('event', 'launch_game', { game_name: NAMES[game] });
+    window.parent.postMessage({ event: 'launch_game', game_name: NAMES[game] }, '*');
 
     // Update header
     document.getElementById('nav-back').classList.add('show');
