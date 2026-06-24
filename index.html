@@ -254,6 +254,7 @@
     // Track game launch in GA
     gtag('event', 'launch_game', { game_name: NAMES[game] });
     window.parent.postMessage({ event: 'launch_game', game_name: NAMES[game] }, '*');
+    if (window.ccTrack) ccTrack('launch_game', NAMES[game]);
 
     // Update header
     document.getElementById('nav-back').classList.add('show');
@@ -318,6 +319,30 @@
   // Send on load and whenever content changes
   window.addEventListener('load', sendHeight);
   new ResizeObserver(sendHeight).observe(document.body);
+</script>
+<!-- ── CourtsideConversation Analytics ── -->
+<script>
+(function() {
+  const ENDPOINT = 'https://script.google.com/macros/s/AKfycbzoizk6GpofHHaOqFpcZUNCopsYGJvwVDXzUVC5JMSzCuKvN6cB06QYX9nsYOQmdWEBxg/exec';
+  function getVisitorId() {
+    let id = localStorage.getItem('cc_visitor_id');
+    const isNew = !id;
+    if (!id) {
+      id = 'v_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+      localStorage.setItem('cc_visitor_id', id);
+    }
+    return { id, isNew };
+  }
+  function logEvent(event, game) {
+    const { id, isNew } = getVisitorId();
+    fetch(ENDPOINT, {
+      method: 'POST',
+      body: JSON.stringify({ visitorId: id, event, game: game || '', isNew }),
+    }).catch(() => {});
+  }
+  window.ccTrack = logEvent;
+  logEvent('page_load', '');
+})();
 </script>
 </body>
 </html>
